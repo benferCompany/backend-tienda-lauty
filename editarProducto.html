@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+</head>
+
+<body>
+    <h1>Editar Producto</h1>
+    <form id="editProductForm">
+        <label for="id" disabled>ID del Producto:</label><br>
+        <input type="number" id="id" name="id" required readonly><br><br>
+
+        <label for="titulo">Título:</label><br>
+        <input type="text" id="titulo" name="titulo" required><br><br>
+
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" required></textarea><br><br>
+
+        <label for="costo">Costo:</label><br>
+        <input type="number" step="0.01" id="costo" name="costo" required><br><br>
+
+        <label for="pvp">PVP:</label><br>
+        <input type="number" step="0.01" id="pvp" name="pvp" required><br><br>
+
+        <label for="img">URL de la Imagen:</label><br>
+        <input type="text" id="img" name="img" required><br><br>
+        <label for="categoria">Categorias</label>
+        <select name="categoria" id="categoria">
+
+        </select><br><br>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <div id="result"></div>
+    <script src="javascript/editarProductos.js">
+
+
+
+    </script>
+    <script>
+        // Cargar los datos del producto (simulado)
+
+
+        const product = {
+            id: 1,
+            titulo: "Producto Ejemplo",
+            descripcion: "Descripción del producto",
+            costo: 10.00,
+            pvp: 15.00,
+            img: "https://example.com/image.jpg"
+        };
+
+        // Rellenar el formulario con los datos del producto
+        window.onload = async () => {
+            const getParam = new URLSearchParams(window.location.search);
+            const idParam = getParam.get("id");
+            const select = document.getElementById('categoria');
+            const getProduct = await editarProducto(idParam);
+            const categorias = await getCategorias(select, getProduct.categoria_id);
+            document.getElementById('id').value = getProduct.ID;
+            document.getElementById('titulo').value = getProduct.Titulo;
+            document.getElementById('descripcion').value = getProduct.Descripcion;
+            document.getElementById('costo').value = getProduct.Costo;
+            document.getElementById('pvp').value = getProduct.PVP;
+            document.getElementById('img').value = getProduct.img;
+        };
+
+        // Manejar el envío del formulario
+        document.getElementById('editProductForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Evitar recargar la página
+
+            // Obtener los datos del formulario
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch('productos/editarProducto.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json(); // Convertir la respuesta a JSON
+                console.log(data); // Mostrar en consola para depuración
+
+                // Mostrar el resultado al usuario
+                const resultDiv = document.getElementById('result');
+                resultDiv.textContent = data.message;
+                resultDiv.style.color = data.success ? 'green' : 'red';
+            } catch (error) {
+                console.error('Error:', error);
+
+            }
+        });
+    </script>
+</body>
+
+</html>

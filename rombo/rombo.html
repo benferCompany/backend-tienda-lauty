@@ -1,0 +1,38 @@
+<style>
+    .padre-contenedor {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .padre-contenedor div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .contenedor {
+        background: red;
+        width: 500px;
+        height: 500px;
+        transform: rotate(45deg);
+    }
+
+    .contenedor div {
+        text-align: center;
+        color: white;
+        transform: rotate(-45deg);
+    }
+</style>
+<div class="padre-contenedor">
+    <div>
+        <div class="contenedor">
+            <div>
+                <h1>Nosotros</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
